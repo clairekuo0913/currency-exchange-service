@@ -1,2 +1,2 @@
-# rate-exchange-api
+# currency-exchange-service
 a simple implementation of rate exchange api
