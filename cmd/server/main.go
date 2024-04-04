@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+
+	"rate-exchange-api/internal/currencyexchange"
+	"rate-exchange-api/internal/handler"
 )
 
 func main() {
@@ -12,11 +15,11 @@ func main() {
 		port = "8080"
 	}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if _, err := fmt.Fprintf(w, "Currency Exchange Service is up!"); err != nil {
-			return
-		}
-	})
+	svc := currencyexchange.InitializeService()
+
+	exchangeHandler := handler.NewExchangeHandler(svc)
+
+	http.HandleFunc("/convert", exchangeHandler)
 
 	fmt.Printf("Starting server on port %s...\n", port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
