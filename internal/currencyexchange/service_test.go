@@ -1,6 +1,8 @@
 package currencyexchange
 
 import (
+	"encoding/json"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -10,8 +12,24 @@ import (
 func TestCurrencyExchangeService_ConvertCurrency(t *testing.T) {
 	r := require.New(t)
 
-	data := model.ExchangeRateData
-	service := NewCurrencyExchangeService(data)
+	tmpFile, err := os.CreateTemp("", "rates*.json")
+	r.NoError(err)
+	defer func(name string) {
+		_ = os.Remove(name)
+	}(tmpFile.Name())
+
+	rates := model.ExchangeRateMap{
+		"TWD": {"JPY": 3.669, "USD": 0.03281},
+		"USD": {"TWD": 30.444, "JPY": 111.801},
+		"JPY": {"TWD": 0.26956, "USD": 0.00885},
+	}
+
+	data, err := json.Marshal(rates)
+	r.NoError(err)
+	_, err = tmpFile.Write(data)
+	r.NoError(err)
+
+	service := NewCurrencyExchangeService(LoadExchangeRateData(tmpFile.Name()))
 
 	tests := []struct {
 		name         string
