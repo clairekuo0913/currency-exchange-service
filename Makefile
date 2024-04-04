@@ -2,7 +2,7 @@
 
 build:
 	@echo "Building currency exchange service..."
-	@docker build -t currency-exchange .
+	@docker build -t currency-exchange:latest .
 
 run: build
 	@echo "Running currency exchange service..."
