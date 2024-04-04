@@ -6,7 +6,9 @@ const (
 	CurrencyCodeUSD = "USD"
 )
 
-var ExchangeRateData = map[string]map[string]float64{
+type ExchangeRateMap map[string]map[string]float64
+
+var ExchangeRateData = ExchangeRateMap{
 	CurrencyCodeTWD: {
 		CurrencyCodeTWD: 1,
 		CurrencyCodeJPY: 3.669,

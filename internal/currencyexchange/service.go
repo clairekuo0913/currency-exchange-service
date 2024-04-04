@@ -15,13 +15,11 @@ type CurrencyExchangeService interface {
 	ConvertCurrency(source string, target string, amountStr string) (string, error)
 }
 
-type Service struct{}
-
-func NewService() *Service {
-	return &Service{}
+type currencyExchangeServiceImpl struct {
+	data model.ExchangeRateMap
 }
 
-func (s *Service) ConvertCurrency(source string, target string, amountStr string) (string, error) {
+func (c currencyExchangeServiceImpl) ConvertCurrency(source string, target string, amountStr string) (string, error) {
 	amountStr = strings.Replace(amountStr, ",", "", -1)
 	amount, err := strconv.ParseFloat(amountStr, 64)
 	if err != nil {
@@ -44,4 +42,12 @@ func (s *Service) ConvertCurrency(source string, target string, amountStr string
 func formatWithComma(amount float64) string {
 	p := message.NewPrinter(language.English)
 	return p.Sprintf("%v", amount)
+}
+
+func NewCurrencyExchangeService(data model.ExchangeRateMap) CurrencyExchangeService {
+	return &currencyExchangeServiceImpl{data: data}
+}
+
+func NewExchangeRateData() model.ExchangeRateMap {
+	return model.ExchangeRateData
 }
