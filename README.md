@@ -15,11 +15,13 @@ Please ensure your requests use these currency codes for the source and target p
 - docker-compose
 
 ## Configuration
-The service configuration can be adjusted via the .env file located in the project root. Currently, it supports changing the server port. For example:
+A `.env` file is required for configuring the service, located in the project root directory. The file should contain the following environment variable:
 ```
 SERVER_PORT=8080
 ```
-The default port would be 8080 if the env file is not detected.
+This variable specifies the port on which the server will listen. 
+If the `SERVER_PORT` variable is not specified, the service defaults to using port 8080.
+Ensure the `.env` file is in place and properly configured before building and running the service.
 
 ## Building and Running the Service
 To build and run the service, use the following command:

@@ -12,6 +12,7 @@ FROM alpine:latest
 
 WORKDIR /root/
 COPY --from=builder /app/currency-exchange .
+COPY .env .
 
 # Command to run the executable
 CMD ["./currency-exchange"]
