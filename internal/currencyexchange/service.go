@@ -41,7 +41,7 @@ func (c currencyExchangeServiceImpl) ConvertCurrency(source string, target strin
 
 func formatWithComma(amount float64) string {
 	p := message.NewPrinter(language.English)
-	return p.Sprintf("%v", amount)
+	return p.Sprintf("%.2f", amount)
 }
 
 func NewCurrencyExchangeService(data model.ExchangeRateMap) CurrencyExchangeService {
