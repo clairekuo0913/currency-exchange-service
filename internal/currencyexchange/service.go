@@ -1,8 +1,11 @@
 package currencyexchange
 
 import (
+	"encoding/json"
 	"errors"
+	"log"
 	"math"
+	"os"
 	"strconv"
 	"strings"
 
@@ -26,7 +29,7 @@ func (c currencyExchangeServiceImpl) ConvertCurrency(source string, target strin
 		return "", errors.New("invalid amount format")
 	}
 
-	rate, ok := model.ExchangeRateData[source][target]
+	rate, ok := c.data[source][target]
 	if !ok {
 		return "", errors.New("currency conversion rate not found")
 	}
@@ -48,6 +51,18 @@ func NewCurrencyExchangeService(data model.ExchangeRateMap) CurrencyExchangeServ
 	return &currencyExchangeServiceImpl{data: data}
 }
 
-func NewExchangeRateData() model.ExchangeRateMap {
-	return model.ExchangeRateData
+func LoadExchangeRateData(filePath string) model.ExchangeRateMap {
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		log.Printf("Failed to load exchange rate data from %s, using default. Error: %v", filePath, err)
+		return model.ExchangeRateData
+	}
+
+	var rates model.ExchangeRateMap
+	if err := json.Unmarshal(data, &rates); err != nil {
+		log.Printf("Failed to parse exchange rate data, using default. Error: %v", err)
+		return model.ExchangeRateData
+	}
+
+	return rates
 }

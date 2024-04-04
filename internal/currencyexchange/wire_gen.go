@@ -6,10 +6,22 @@
 
 package currencyexchange
 
+import (
+	"os"
+	"rate-exchange-api/internal/model"
+)
+
 // Injectors from wire.go:
 
 func InitializeService() CurrencyExchangeService {
-	exchangeRateMap := NewExchangeRateData()
+	exchangeRateMap := ProvideExchangeRateData()
 	currencyExchangeService := NewCurrencyExchangeService(exchangeRateMap)
 	return currencyExchangeService
+}
+
+// wire.go:
+
+func ProvideExchangeRateData() model.ExchangeRateMap {
+	filePath := os.Getenv("RATE_EXCHANGE_JSON_PATH")
+	return LoadExchangeRateData(filePath)
 }
